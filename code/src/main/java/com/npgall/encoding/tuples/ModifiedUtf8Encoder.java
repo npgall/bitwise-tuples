@@ -3,11 +3,15 @@ package com.npgall.encoding.tuples;
 import java.io.*;
 
 /**
+ * Encodes and decodes Strings and {@link CharSequence}s to/from
+ * <a href="https://en.wikipedia.org/wiki/UTF-8#Modified_UTF-8">Modified-UTF8</a>-encoded binary.
+ * The binary encoding is terminated with a null byte.
  *
  * @author npgall
  */
-public class StringEncoder {
+public class ModifiedUtf8Encoder implements BitwiseEncoder<CharSequence> {
 
+    @Override
     public void encode(CharSequence source, OutputStream sink) {
         try {
             encodeModifiedUtf8(source, sink);
@@ -16,11 +20,12 @@ public class StringEncoder {
         }
     }
 
-    public String decode(InputStream source) {
+    @Override
+    public CharSequence decode(InputStream source) {
         try {
             StringBuilder sink = new StringBuilder();
             decodeModifiedUtf8(source, sink);
-            return sink.toString();
+            return sink;
         }
         catch (Exception e) {
             throw new IllegalStateException("Failed to decode Modified-UTF8 bytes from input stream", e);

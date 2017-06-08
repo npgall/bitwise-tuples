@@ -8,11 +8,12 @@ import java.io.ByteArrayOutputStream;
 import static org.junit.Assert.*;
 
 /**
+ * Unit tests for {@link ModifiedUtf8Encoder}
  * @author npgall
  */
-public class StringEncoderTest {
+public class ModifiedUtf8EncoderTest {
 
-    private final StringEncoder stringEncoder = new StringEncoder();
+    private final BitwiseEncoder<CharSequence> encoder = new ModifiedUtf8Encoder();
 
     @Test
     public void testEncoding() {
@@ -26,8 +27,8 @@ public class StringEncoderTest {
     public void testRoundTripEncodingAndDecoding() {
         String input = "a\0\u00E0\uD83D\uDE02";
         byte[] encoded = encode(input);
-        String decoded = decode(encoded);
-        assertEquals(input, decoded);
+        CharSequence decoded = decode(encoded);
+        assertEquals(input, decoded.toString());
     }
 
 
@@ -47,11 +48,11 @@ public class StringEncoderTest {
 
     private byte[] encode(String input) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        stringEncoder.encode(input, baos);
+        encoder.encode(input, baos);
         return baos.toByteArray();
     }
 
-    private String decode(byte[] bytes) {
-        return stringEncoder.decode(new ByteArrayInputStream(bytes));
+    private CharSequence decode(byte[] bytes) {
+        return encoder.decode(new ByteArrayInputStream(bytes));
     }
 }
