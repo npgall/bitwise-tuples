@@ -1,5 +1,6 @@
 package com.npgall.encoding.tuples;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -10,7 +11,7 @@ import java.io.OutputStream;
  */
 public interface BitwiseEncoder<T> {
 
-    void encode(T source, OutputStream sink);
+    void encode(T value, OutputStream output) throws IOException;
 
-    T decode(InputStream source);
+    T decode(InputStream input) throws IOException;
 }
