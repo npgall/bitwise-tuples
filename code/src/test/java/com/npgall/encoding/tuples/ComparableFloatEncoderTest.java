@@ -10,7 +10,7 @@ import static com.npgall.encoding.tuples.TestUtil.asBinaryString;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for {@link ComparableFloatEncoderTest}.
+ * Unit tests for {@link ComparableFloatEncoder}.
  *
  * @author npgall
  */

@@ -12,9 +12,10 @@ public class ComparableFloatEncoder implements BitwiseEncoder<Float> {
 
     private static final int SIGN_MASK = 0x80000000;
     private static final int NUM_BITS = Integer.SIZE;
+    private static final int NUM_BITS_WITHOUT_SIGN = NUM_BITS - 1;
     private static final int ONE_BYTE = 8;
     private static final int INITIAL_BITS_TO_SHIFT = NUM_BITS - ONE_BYTE;
-    private static final int ALL_BITS_MASK = Integer.MAX_VALUE;
+    private static final int ALL_BITS_EXCEPT_SIGN_MASK = Integer.MAX_VALUE;
 
     @Override
     public void encode(Float value, OutputStream output) throws IOException {
@@ -31,7 +32,7 @@ public class ComparableFloatEncoder implements BitwiseEncoder<Float> {
 
         // If intValue is positive, do nothing.
         // If intValue is negative, flip all the bits except for the sign bit.
-        intValue ^= (intValue >> 31) & ALL_BITS_MASK;
+        intValue ^= (intValue >> NUM_BITS_WITHOUT_SIGN) & ALL_BITS_EXCEPT_SIGN_MASK;
 
         intValue ^= SIGN_MASK; // flip MSB (the sign bit)
 
@@ -52,7 +53,7 @@ public class ComparableFloatEncoder implements BitwiseEncoder<Float> {
         intValue ^= SIGN_MASK; // flip MSB (the sign bit)
 
         // Undo the bit-flipping for negative numbers...
-        intValue ^= (intValue >> 31) & ALL_BITS_MASK;
+        intValue ^= (intValue >> NUM_BITS_WITHOUT_SIGN) & ALL_BITS_EXCEPT_SIGN_MASK;
 
         return Float.intBitsToFloat(intValue);
     }
